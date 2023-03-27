@@ -1,0 +1,21 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block body %}
+    {% if entry %}
+        {{ entry }}
+    {% else %}
+        <h2>{{title}}</h2>
+        <h3 style="color:red">There is no exact information about this entry in our encyclopedia</h3>
+    {% endif %}
+    {% if entries_search %}
+        <h2>Similar information</h2>
+        {% for entry_item in entries_search %}
+            <li><a href = 'title/{{entry_item}}'>{{ entry_item }}</a></li>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}

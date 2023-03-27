@@ -1,0 +1,15 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block body %}
+    {% if form_page %}
+        <form id='create-page' action = "" method="post">
+            {% csrf_token %}
+            {{ form_page }}
+        </form>
+    {% endif %}
+
+{% endblock %}

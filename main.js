@@ -1,8 +1,44 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const electron= require('electron')
+const app = electron.app
+// Module to create native browser window.
+const BrowserWindow = electron.BrowserWindow
 const path = require('path')
+const url = require('url')
+
+let mainWindow
+
+
+const startDjangoServer = () =>{
+  var djangoBackend  = require('child_process').spawn('../env/Scripts/python.exe', ['./wiki/manage.py', 'runserver', '--noreload']);
+  djangoBackend.stdout.on('data', data =>
+    {
+      console.log(`stdout:\n${data}`);
+    });
+    djangoBackend.stderr.on('data', data =>
+    {
+      console.log(`stderr: ${data}`);
+    });
+    djangoBackend.on('error', (error) =>
+    {
+      console.log(`error: ${error.message}`);
+    });
+    djangoBackend.on('close', (code) =>
+    {
+      console.log(`child process exited with code ${code}`);
+    });
+    djangoBackend.on('message', (message) =>
+    {
+      console.log(`message:\n${message}`);
+    });
+    return djangoBackend;
+}
 
 function createWindow () {
+  startDjangoServer();
+
+  var mainAddr = 'http://localhost:8000';
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
@@ -13,10 +49,8 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  mainWindow.loadURL(mainAddr);
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
